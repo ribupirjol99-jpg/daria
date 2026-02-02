@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine 💖</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ffd6e8, #ffeef5);
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+.container {
+  text-align: center;
+}
+
+.card {
+  background: white;
+  padding: 35px;
+  border-radius: 20px;
+  width: 380px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  z-index: 2;
+}
+
+#question {
+  font-size: 22px;
+}
+
+#finalText {
+  display: none;
+  font-size: 26px;
+  font-weight: bold;
+  color: #ff4d88;
+}
+
+.buttons {
+  margin-top: 20px;
+}
+
+button {
+  padding: 12px 26px;
+  font-size: 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+#yes {
+  background: #ff4d88;
+  color: white;
+}
+
+#no {
+  background: #ddd;
+  position: absolute;
+}
+
+#yay {
+  margin-top: 25px;
+  display: none;
+}
+
+#yayText {
+  font-size: 60px;
+  animation: yayBounce 1s infinite;
+}
+
+@keyframes yayBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4) rotate(-5deg); }
+  100% { transform: scale(1); }
+}
+
+.particle {
+  position: fixed;
+  top: -10px;
+  animation: fall 4s linear forwards;
+  font-size: 22px;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(120vh);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="card">
+
+    <h2 id="question">Daria, will you be my Valentine? 💘</h2>
+    <h2 id="finalText">You're officially my Valentine ❤️</h2>
+
+    <div class="buttons" id="buttons">
+      <button id="yes">YES</button>
+      <button id="no">NO</button>
+    </div>
+
+    <div id="yay">
+      <h1 id="yayText">YAY! 🎉</h1>
+
+      <img
+        src="https://media.giphy.com/media/26tOZ42Mg6pbTUPHW/giphy.gif"
+        style="width:300px; border-radius:20px;"
+      >
+
+      <!-- AUDIO -->
+      <audio id="whistle">
+        <source src="https://cdn.pixabay.com/download/audio/2022/10/30/audio_2d5a7a7d6b.mp3">
+      </audio>
+
+      <audio id="boom">
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9b6b8b2e52.mp3">
+      </audio>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const buttons = document.getElementById("buttons");
+const yay = document.getElementById("yay");
+const whistle = document.getElementById("whistle");
+const boom = document.getElementById("boom");
+const card = document.querySelector(".card");
+const question = document.getElementById("question");
+const finalText = document.getElementById("finalText");
+
+// NO fuge
+function moveNo() {
+  const maxX = card.clientWidth - noBtn.offsetWidth;
+  const maxY = card.clientHeight - noBtn.offsetHeight;
+  noBtn.style.left = Math.random() * maxX + "px";
+  noBtn.style.top = Math.random() * maxY + "px";
+}
+
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
+
+// YES click
+yesBtn.addEventListener("click", () => {
+  // schimbă textul
+  question.style.display = "none";
+  finalText.style.display = "block";
+
+  // dispar butoanele
+  buttons.style.display = "none";
+
+  // apare YAY + GIF
+  yay.style.display = "block";
+
+  // vibrație
+  if (navigator.vibrate) {
+    navigator.vibrate([200, 100, 300, 100, 500]);
+  }
+
+  // sunete sincronizate
+  whistle.currentTime = 0;
+  boom.currentTime = 0;
+  whistle.play();
+  setTimeout(() => boom.play(), 900);
+
+  // confetti + inimioare
+  for (let i = 0; i < 50; i++) createParticle();
+});
+
+function createParticle() {
+  const p = document.createElement("div");
+  p.className = "particle";
+  p.style.left = Math.random() * 100 + "vw";
+  p.style.animationDuration = Math.random() * 2 + 3 + "s";
+  p.innerText = Math.random() > 0.5 ? "❤️" : "🎉";
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 4000);
+}
+</script>
+
+</body>
+</html>
